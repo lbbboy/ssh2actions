@@ -16,7 +16,9 @@ jobs:
         run: |
           curl -sSL https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz -o ngrok.tgz
           tar -xvzf ngrok.tgz
-          sudo mv ngrok /usr/local/bin/ngrok
+          mkdir -p $HOME/bin
+          mv ngrok $HOME/bin/
+          echo "$HOME/bin" >> $GITHUB_PATH
           ngrok version
 
       - name: Start SSH via ngrok
