@@ -1,0 +1,22 @@
+name: Ubuntu with SSH (ngrok)
+
+on:
+  workflow_dispatch:
+  watch:
+    types: [started]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Start SSH via ngrok
+        uses: P3TERX/ssh2actions@main
+        with:
+          mode: ngrok
+        env:
+          NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+          NGROK_REGION: us
+          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
