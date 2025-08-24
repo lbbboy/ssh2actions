@@ -1,4 +1,4 @@
-name: Ubuntu with SSH (cloudflared)
+name: Ubuntu with SSH (ngrok)
 
 on:
   workflow_dispatch:
@@ -12,9 +12,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Start SSH via cloudflared
+      - name: Update ngrok
+        run: |
+          curl -sSL https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz -o ngrok.tgz
+          tar -xvzf ngrok.tgz
+          sudo mv ngrok /usr/local/bin/ngrok
+          ngrok version
+
+      - name: Start SSH via ngrok
         uses: P3TERX/ssh2actions@main
         with:
-          mode: cloudflared
+          mode: ngrok
         env:
+          NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+          NGROK_REGION: us
           SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
