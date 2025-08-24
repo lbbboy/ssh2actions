@@ -8,7 +8,7 @@
 # https://github.com/P3TERX/ssh2actions
 # File name：ngrok2actions.sh
 # Description: Connect to Github Actions VM via SSH by using ngrok
-# Version: 2.0
+# Version: 3.0
 #
 
 Green_font_prefix="\033[32m"
@@ -34,18 +34,14 @@ fi
 
 if [[ -n "$(uname | grep -i Linux)" ]]; then
     echo -e "${INFO} Install ngrok ..."
-    curl -fsSL https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip -o ngrok.zip
-    unzip ngrok.zip ngrok
-    rm ngrok.zip
-    chmod +x ngrok
+    curl -fsSL https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz -o ngrok.tgz
+    tar -xvzf ngrok.tgz ngrok
     sudo mv ngrok /usr/local/bin
     ngrok -v
 elif [[ -n "$(uname | grep -i Darwin)" ]]; then
     echo -e "${INFO} Install ngrok ..."
-    curl -fsSL https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-darwin-amd64.zip -o ngrok.zip
-    unzip ngrok.zip ngrok
-    rm ngrok.zip
-    chmod +x ngrok
+    curl -fsSL https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz -o ngrok.tgz
+    tar -xvzf ngrok.tgz ngrok
     sudo mv ngrok /usr/local/bin
     ngrok -v
     USER=root
