@@ -12,15 +12,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Update ngrok
-        run: |
-          curl -sSL https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz -o ngrok.tgz
-          tar -xvzf ngrok.tgz
-          mkdir -p $HOME/bin
-          mv ngrok $HOME/bin/
-          echo "$HOME/bin" >> $GITHUB_PATH
-          ngrok version
-
       - name: Start SSH via ngrok
         uses: lbbboy/ssh2actions@main
         with:
