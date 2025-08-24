@@ -1,4 +1,4 @@
-name: Ubuntu with SSH (ngrok)
+name: Ubuntu with SSH (cloudflared)
 
 on:
   workflow_dispatch:
@@ -12,11 +12,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Start SSH via ngrok
+      - name: Start SSH via cloudflared
         uses: P3TERX/ssh2actions@main
         with:
-          mode: ngrok
+          mode: cloudflared
         env:
-          NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
-          NGROK_REGION: us
           SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
