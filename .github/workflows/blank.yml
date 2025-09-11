@@ -2,8 +2,23 @@ name: Ubuntu with SSH (ngrok)
 
 on:
   workflow_dispatch:
-#  watch:
-#    types: [started]
+    inputs:
+      ssh:
+        description: 'Enable SSH connection?'
+        required: true
+        default: 'false'
+        type: choice
+        options:
+          - false
+          - true
+      ngrok:
+        description: 'Start SSH via ngrok'
+        required: true
+        default: 'false'
+        type: choice
+        options:
+          - false
+          - true
 
 jobs:
   build:
@@ -11,6 +26,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: SSH connection to Actions
+        env:
+          TELEGRAM_BOT_TOKEN : ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        uses: lbbboy/ssh2actions@main
+        if: ${{ github.event.inputs.ssh == 'true' }}
 
       - name: Start SSH via ngrok
         uses: lbbboy/ssh2actions@main
@@ -20,6 +42,8 @@ jobs:
           NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
           NGROK_REGION: us
           SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+        if: ${{ github.event.inputs.ngrok == 'true' }}
+        
       - name: Delete workflow runs
         uses: GitRML/delete-workflow-runs@main
         with:
