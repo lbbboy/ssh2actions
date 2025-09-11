@@ -19,6 +19,8 @@ on:
         options:
           - false
           - true
+          
+permissions: write-all
 
 jobs:
   build:
