@@ -49,11 +49,6 @@ elif [[ -n "$(uname | grep -i Darwin)" ]]; then
     echo 'PermitRootLogin yes' | sudo tee -a /etc/ssh/sshd_config >/dev/null
     sudo launchctl unload /System/Library/LaunchDaemons/ssh.plist
     sudo launchctl load -w /System/Library/LaunchDaemons/ssh.plist
-
-if [ -n "$GITHUB_WORKSPACE" ]; then
-    echo "cd \$GITHUB_WORKSPACE" >> /home/runner/.bash_profile
-fi
-
 else
     echo -e "${ERROR} This system is not supported!"
     exit 1
@@ -62,6 +57,26 @@ fi
 if [[ -n "${SSH_PASSWORD}" ]]; then
     echo -e "${INFO} Set user(${USER}) password ..."
     echo -e "${SSH_PASSWORD}\n${SSH_PASSWORD}" | sudo passwd "${USER}"
+fi
+
+# ---------- 自动进入 GitHub Actions 工作目录 ----------
+if [ -n "$GITHUB_WORKSPACE" ]; then
+  echo -e "${INFO} Configure login shell to enter GITHUB_WORKSPACE ..."
+  for file in /home/runner/.bash_profile /home/runner/.profile /home/runner/.bashrc; do
+    if ! sudo grep -qxF '# Auto-enter GitHub Actions workspace (added by ssh2actions)' "$file" 2>/dev/null; then
+      sudo tee -a "$file" > /dev/null <<'EOF'
+# Auto-enter GitHub Actions workspace (added by ssh2actions)
+if [ -n "$GITHUB_WORKSPACE" ] && [ -d "$GITHUB_WORKSPACE" ]; then
+  cd "$GITHUB_WORKSPACE"
+else
+  last=$(ls -1dt /home/runner/work/*/* 2>/dev/null | head -n1)
+  if [ -n "$last" ] && [ -d "$last" ]; then
+    cd "$last"
+  fi
+fi
+EOF
+    fi
+  done
 fi
 
 echo -e "${INFO} Start ngrok proxy for SSH port..."
