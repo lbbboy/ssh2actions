@@ -51,7 +51,7 @@ elif [[ -n "$(uname | grep -i Darwin)" ]]; then
     sudo launchctl load -w /System/Library/LaunchDaemons/ssh.plist
 
 if [ -n "$GITHUB_WORKSPACE" ]; then
-    echo "cd \$GITHUB_WORKSPACE" >> /root/.bashrc
+    echo "cd \$GITHUB_WORKSPACE" >> /home/runner/.bashrc
 fi
 
 else
