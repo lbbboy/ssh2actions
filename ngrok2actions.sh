@@ -49,6 +49,9 @@ elif [[ -n "$(uname | grep -i Darwin)" ]]; then
     echo 'PermitRootLogin yes' | sudo tee -a /etc/ssh/sshd_config >/dev/null
     sudo launchctl unload /System/Library/LaunchDaemons/ssh.plist
     sudo launchctl load -w /System/Library/LaunchDaemons/ssh.plist
+    if [ -n "$GITHUB_WORKSPACE" ]; then
+        echo "cd \$GITHUB_WORKSPACE" | sudo tee -a /root/.bashrc > /dev/null
+    fi
 else
     echo -e "${ERROR} This system is not supported!"
     exit 1
@@ -125,5 +128,4 @@ while [[ -n $(ps aux | grep ngrok) ]]; do
         exit 0
     fi
 done
-
 # ref: https://gist.github.com/retyui/7115bb6acf151351a143ec8f96a7c561
