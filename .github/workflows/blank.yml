@@ -48,8 +48,12 @@ jobs:
           SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
         if: ${{ github.event.inputs.ngrok == 'true' }}
         
-      - name: Delete workflow runs
-        uses: GitRML/delete-workflow-runs@main
+      - name: Delete old Releases and Workflows
+        uses: ophub/delete-releases-workflows@main
         with:
-         retain_days: 0
-         keep_minimum_runs: 2
+          gh_token: ${{secrets.GITHUB_TOKEN}}
+          delete_releases: true
+          releases_keep_latest: 0
+          delete_tags: true
+          delete_workflows: true
+          workflows_keep_day: 0
